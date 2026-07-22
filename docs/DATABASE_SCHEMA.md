@@ -539,73 +539,26 @@ seller_analysis
 
 ---
 
-# Foreign Keys
+# Foreign Keys & Deletion Behaviors
 
-```
-profiles.auth_user_id
+All user-dependent tables implement cascading deletes to ensure clean accounts purge and avoid constraint conflicts:
 
-→ auth.users.id
-
-preferences.profile_id
-
-→ profiles.id
-
-search_sessions.profile_id
-
-→ profiles.id
-
-conversations.profile_id
-
-→ profiles.id
-
-messages.conversation_id
-
-→ conversations.id
-
-recommendations.search_session_id
-
-→ search_sessions.id
-
-recommendations.recommended_product_id
-
-→ products.id
-
-marketplace_results.product_id
-
-→ products.id
-
-marketplace_results.recommendation_id
-
-→ recommendations.id
-
-review_analysis.marketplace_result_id
-
-→ marketplace_results.id
-
-seller_analysis.marketplace_result_id
-
-→ marketplace_results.id
-
-saved_items.profile_id
-
-→ profiles.id
-
-saved_items.recommendation_id
-
-→ recommendations.id
-
-search_history.profile_id
-
-→ profiles.id
-
-search_history.search_session_id
-
-→ search_sessions.id
-
-notifications.profile_id
-
-→ profiles.id
-```
+* **profiles.auth_user_id** $\rightarrow$ `auth.users.id` `ON DELETE CASCADE`
+* **preferences.profile_id** $\rightarrow$ `profiles.id` `ON DELETE CASCADE`
+* **search_sessions.profile_id** $\rightarrow$ `profiles.id` `ON DELETE SET NULL` (preserving anonymous usage or session data)
+* **conversations.profile_id** $\rightarrow$ `profiles.id` `ON DELETE CASCADE`
+* **messages.conversation_id** $\rightarrow$ `conversations.id` `ON DELETE CASCADE`
+* **recommendations.search_session_id** $\rightarrow$ `search_sessions.id` `ON DELETE CASCADE`
+* **recommendations.recommended_product_id** $\rightarrow$ `products.id` `ON DELETE RESTRICT` (prevents product catalog deletion while referred by recommendations)
+* **marketplace_results.product_id** $\rightarrow$ `products.id` `ON DELETE CASCADE`
+* **marketplace_results.recommendation_id** $\rightarrow$ `recommendations.id` `ON DELETE CASCADE`
+* **review_analysis.marketplace_result_id** $\rightarrow$ `marketplace_results.id` `ON DELETE CASCADE`
+* **seller_analysis.marketplace_result_id** $\rightarrow$ `marketplace_results.id` `ON DELETE CASCADE`
+* **saved_items.profile_id** $\rightarrow$ `profiles.id` `ON DELETE CASCADE`
+* **saved_items.recommendation_id** $\rightarrow$ `recommendations.id` `ON DELETE CASCADE`
+* **search_history.profile_id** $\rightarrow$ `profiles.id` `ON DELETE CASCADE`
+* **search_history.search_session_id** $\rightarrow$ `search_sessions.id` `ON DELETE CASCADE`
+* **notifications.profile_id** $\rightarrow$ `profiles.id` `ON DELETE CASCADE`
 
 ---
 
@@ -697,20 +650,27 @@ profile_id
 
 ---
 
-# Row Level Security
+# Row Level Security (RLS) Policies
 
-Enable RLS on every user-owned table.
+All user-facing tables enforce strict RLS policies using Supabase's `auth.uid()` function:
 
-Policy:
+### 1. `profiles` Table
+- **Enable RLS:** `ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;`
+- **Select Policy:** `CREATE POLICY "Allow public read access to profiles" ON profiles FOR SELECT USING (true);`
+- **Update Policy:** `CREATE POLICY "Allow users to update own profile" ON profiles FOR UPDATE USING (auth.uid() = auth_user_id);`
 
-Users may only
+### 2. `preferences` Table
+- **Enable RLS:** `ALTER TABLE preferences ENABLE ROW LEVEL SECURITY;`
+- **All Operations Policy:** `CREATE POLICY "Allow users access to own preferences" ON preferences FOR ALL TO authenticated USING (profile_id IN (SELECT id FROM profiles WHERE auth_user_id = auth.uid())) WITH CHECK (profile_id IN (SELECT id FROM profiles WHERE auth_user_id = auth.uid()));`
 
-* Read their own data
-* Insert their own data
-* Update their own data
-* Delete their own data
+### 3. `conversations` & `messages` Tables
+- **Enable RLS:** Enable RLS on both tables.
+- **Select/Modify Conversations:** `CREATE POLICY "Users can manage own conversations" ON conversations FOR ALL TO authenticated USING (profile_id IN (SELECT id FROM profiles WHERE auth_user_id = auth.uid()));`
+- **Select/Modify Messages:** `CREATE POLICY "Users can manage messages in own conversations" ON messages FOR ALL TO authenticated USING (conversation_id IN (SELECT id FROM conversations WHERE profile_id IN (SELECT id FROM profiles WHERE auth_user_id = auth.uid())));`
 
-Public marketplace metadata (if later introduced) can have separate read-only policies.
+### 4. `saved_items` & `search_history` Tables
+- **Enable RLS:** Enable RLS on both tables.
+- **Saved Items Policy:** `CREATE POLICY "Users can manage own saved items" ON saved_items FOR ALL TO authenticated USING (profile_id IN (SELECT id FROM profiles WHERE auth_user_id = auth.uid()));`
 
 ---
 

@@ -394,7 +394,7 @@ Recommendation
 
 ## POST /api/chat
 
-Conversational shopping assistant.
+Conversational shopping assistant supporting progressive answer typing and reasoning details via Server-Sent Events (SSE) streaming.
 
 Authentication Required
 
@@ -406,23 +406,29 @@ Yes
 
 ```json
 {
-  "conversationId": "...",
+  "conversationId": "3c5b8bdf-3ab5-46fd-b6be-d88cc2e16d41",
   "message": "I'm looking for a backpack for university."
 }
 ```
 
 ---
 
-### Response
-
-```json
-{
-  "success": true,
-  "reply": "...",
-  "conversationId": "...",
-  "followUpQuestions": []
-}
-```
+### SSE Response Payload Streams
+Returns a continuous chunked stream:
+- **Reasoning phase:**
+  `event: thinking`
+  `data: { "message": "Evaluating lightweight materials and load distribution..." }`
+- **Text content generation:**
+  `event: reply`
+  `data: { "delta": "Here " }`
+  `event: reply`
+  `data: { "delta": "are the best options..." }`
+- **Clarification choices (if needed):**
+  `event: clarification`
+  `data: { "options": ["Under $50", "$50 to $100", "Over $100"] }`
+- **Stream closure:**
+  `event: end`
+  `data: { "conversationId": "3c5b8bdf-3ab5-46fd-b6be-d88cc2e16d41" }`
 
 ---
 
@@ -767,51 +773,35 @@ Ascending or descending.
 
 ---
 
-# Rate Limiting
+# Rate Limiting & Quota Headers
 
-Unauthenticated
+All requests return standard rate limit headers to let clients track active quotas:
+* `X-RateLimit-Limit`: Maximum requests allowed in the active window.
+* `X-RateLimit-Remaining`: Requests remaining before hitting rate limit threshold.
+* `X-RateLimit-Reset`: Unix timestamp indicating when the current window resets.
 
-```
-60 requests/hour
-```
+### Quota Thresholds
+* **General Authenticated Requests:** 500 requests per rolling 60-minute window.
+* **General Unauthenticated Requests:** 60 requests per rolling 60-minute window.
+* **AI Search & Conversational Chat (`/api/search`, `/api/chat`):** 100 requests per hour.
+* **Image Uploads (`/api/image-search`, `/api/upload`):** 30 uploads per hour.
 
-Authenticated
-
-```
-500 requests/hour
-```
-
-Image uploads
-
-```
-30/hour
-```
-
-AI chat
-
-```
-100/hour
-```
+When a quota is exhausted, the API returns a `429 Too Many Requests` status code with the standard error response block: `{ "success": false, "error": { "code": "RATE_LIMITED", "message": "Too many requests. Please try again later." } }`.
 
 ---
 
-# Caching Strategy
+# Caching Strategy & TTL Constraints
 
-Cache
+To balance performance with fresh pricing, we apply strict caching boundaries:
 
-Marketplace metadata
-
-Supported brands
-
-Categories
-
-Static assets
-
-Do not cache
-
-User preferences
-
-Recommendations
+1. **Marketplace Raw Results Cache (`marketplace_cache` table):**
+   - **Strategy:** Cache raw JSON payloads indexed by hash of normalized query terms.
+   - **TTL:** 15 minutes. Any subsequent duplicate search within 15 minutes hits the DB cache instead of initiating scraping.
+2. **Static Configuration (`/api/marketplaces`):**
+   - **Strategy:** Vercel edge caching with stale-while-revalidate.
+   - **TTL:** 24 hours (`Cache-Control: public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600`).
+3. **No-Cache Directives:**
+   - User profile endpoints, active chat threads, dynamic recommendations, and saved bookmark requests must specify `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate`.
 
 Conversations
 
