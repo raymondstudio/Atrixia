@@ -333,115 +333,47 @@ These preferences influence recommendation generation.
 
 ---
 
-# 5. Frontend Architecture
+# 5. Frontend Architecture & React Server Components (RSC)
+
+Next.js 15 App Router structure with explicit separation between Server (RSC) and Client Components (CC):
 
 ```
-App
-
-│
-
-├── Public Routes
-
-│      ├── Landing
-
-│      ├── Login
-
-│      └── Register
-
-│
-
-├── Protected Routes
-
-│      ├── Home
-
-│      ├── Search
-
-│      ├── History
-
-│      ├── Saved
-
-│      ├── Profile
-
-│      └── Settings
+app/
+├── layout.tsx (RSC: Theme wrapper, Supabase Auth session provider)
+├── page.tsx (RSC: Static premium landing page layout)
+├── (auth)/
+│   ├── login/page.tsx (CC: Supabase login form)
+│   └── register/page.tsx (CC: Onboarding setup wizard)
+└── (dashboard)/
+    ├── layout.tsx (RSC: Sidebar navigation panel, user profile prefetch)
+    ├── home/page.tsx (CC: Conversational AI input dialog, upload zone)
+    ├── search/page.tsx (RSC: Direct stream receiver using React Suspense)
+    ├── history/page.tsx (RSC: Fetching search timeline from DB)
+    └── saved/page.tsx (RSC: Fetching saved reports from DB)
 ```
 
 ---
 
-# 6. Frontend Layers
+# 6. React Server Components vs Client Component Boundaries
 
-## Presentation Layer
+### React Server Components (RSC)
+* **Default execution:** All pages and layouts are Server Components by default to optimize loading performance.
+* **Responsibilities:**
+  - Securely query Supabase database.
+  - Prefetch user preferences, saved items, and historical recommendations directly on the server without API route roundtrips.
+  - Render static layouts and skeleton placeholders.
 
-Pure UI.
+### Client Components (CC)
+* **Explicit Opt-in:** Declared using `'use client'` at the top of the file.
+* **Responsibilities:**
+  - State management for active conversational AI threads.
+  - Drag-and-drop file upload handlers (`react-dropzone`).
+  - Interactive UI controls (Shadcn/ui dialogs, select inputs, profile forms).
+  - Micro-animations and page transitions (`framer-motion`).
 
-Contains
-
-Buttons
-
-Cards
-
-Dialogs
-
-Inputs
-
-Icons
-
-Animations
-
----
-
-## Feature Layer
-
-Business features.
-
-Examples
-
-Search
-
-Recommendation
-
-History
-
-Image Upload
-
-Preferences
-
----
-
-## State Layer
-
-Handles application state.
-
-Responsible for
-
-Current User
-
-Search Session
-
-Recommendation
-
-Marketplace Results
-
-Loading
-
-Errors
-
----
-
-## Service Layer
-
-Communicates with backend.
-
-Contains
-
-Search Service
-
-Recommendation Service
-
-Image Upload Service
-
-History Service
-
-Preference Service
+### Progressive Streaming & Suspense Boundaries
+* The slow marketplace search and review parsing are isolated behind React `<Suspense>` boundaries.
+* The main `/search` layout renders immediately with skeleton loading UI. The backend uses Server-Sent Events (SSE) to progressively stream AI reasoning steps and normalize products into the Client Component state without locking up the page render.
 
 ---
 
@@ -927,51 +859,30 @@ Decision Report
 
 ---
 
-# 20. Error Handling
+# 20. Error Handling & Graceful Degradation
 
-Every layer handles errors independently.
+The application enforces strict layer-specific boundaries for handling faults:
 
-Frontend
-
-User-friendly messages.
-
-Backend
-
-Structured JSON errors.
-
-AI
-
-Retry strategy.
-
-Marketplace
-
-Graceful degradation.
-
-Database
-
-Transaction rollback.
+* **Next.js Global Error Boundary:** Any unexpected rendering crash triggers a fallback UI wrapper showing: *"Something went wrong. The application remains active; please retry your last search."*
+* **Structured API Errors:** Every endpoint returns standard error response schemas (`success: false, error: { code, message, details }`).
+* **Marketplace Failure Abstraction:** If a specific marketplace provider is blocked or times out:
+  - The system isolates that provider and logs a Warning.
+  - The search results are marked with a partial failure indicator, allowing the recommendation engine to run on the remaining active marketplace datasets without crashing.
+* **Database Rollback Integrity:** All multi-row modifications (e.g. saving recommendations along with listings) run inside explicit PostgreSQL transactional blocks.
 
 ---
 
-# 21. Logging
+# 21. Observability & Structured Logging
 
-Log
+We use a structured logging utility (`pino` or Vercel Axiom). Log payloads must be JSON-serialized and exclude sensitive tokens (Supabase JWTs, passwords, user emails):
 
-Authentication
-
-Searches
-
-Errors
-
-AI failures
-
-Marketplace failures
-
-API failures
-
-Performance metrics
-
-Never log secrets.
+* **Search Metrics:** Log query execution latency, cache hits/misses, and AI reasoning tokens.
+* **Provider Fault Tracking:** Log specific rate-limiting error codes (e.g., HTTP 429) returned by Gemini or Scrapers.
+* **Security Logs:** Log any failed JWT validations or RLS policy violations.
+* **Log Level Mapping:**
+  - `INFO`: Cache state changes, recommendation completion.
+  - `WARN`: Scraper timeouts, slow API responses ($>3$ seconds).
+  - `ERROR`: DB connection drops, AI token depletion, uncaught exceptions.
 
 ---
 

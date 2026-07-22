@@ -900,89 +900,45 @@ Marketplace Loading Animation
 
 ---
 
-# Typography
+# Typography Specs
 
-Hero
-
-Large Bold
-
-Section Titles
-
-Bold
-
-Card Titles
-
-Semi Bold
-
-Body
-
-Regular
-
-Captions
-
-Small
-
-Labels
-
-Medium
+* **Hero Headers:** `Outfit`, 40px/2.5rem, Line-height: 1.2, Tracking: `-0.02em`, Weight: 700.
+* **Section Titles:** `Outfit`, 24px/1.5rem, Line-height: 1.3, Weight: 600.
+* **Card Titles:** `Inter`, 16px/1rem, Line-height: 1.4, Weight: 600.
+* **Body Text:** `Inter`, 14px/0.875rem, Line-height: 1.6, Weight: 400.
+* **Metrics/Codes:** `JetBrains Mono`, 12px/0.75rem, Weight: 500.
 
 ---
 
-# Spacing
+# Spacing & Layout
 
-Consistent 8px spacing system.
-
-Generous whitespace.
-
-Comfortable reading width.
+* **Base Unit:** 8px system. Use standard tailwind spacers: `p-2` (8px), `p-4` (16px), `p-6` (24px), `p-8` (32px).
+* **Container Bounds:** Desktop width capped at `max-w-7xl` (1280px) with `px-6` (24px) gutters.
+* **Card Grid:** Responsive grid using auto-fit: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`.
 
 ---
 
-# Color Usage
+# Color Palette Mappings
 
-Primary
-
-Black
-
-Secondary
-
-White
-
-Accent
-
-Blue
-
-Success
-
-Green
-
-Warning
-
-Orange
-
-Error
-
-Red
-
-Neutral
-
-Gray Scale
+* **Surface Base:** `background` base class using `bg-[#09090b]` (deep slate black).
+* **Elevated Surfaces:** Glassmorphic navigation elements use `bg-[#0f0f12]/80` with `backdrop-blur-md` and `border-[rgba(255,255,255,0.08)]`.
+* **System Accents:**
+  - **Success / Best Value:** `hsl(142.1, 70.6%, 45.3%)` (emerald green)
+  - **Warning / Trade-offs:** `hsl(47.9, 95.8%, 53.1%)` (amber yellow)
+  - **Error / Low Confidence:** `hsl(0, 84.2%, 60.2%)` (soft red)
+  - **Premium Accents:** `hsl(263.4, 70%, 50.4%)` (electric violet)
 
 ---
 
-# Accessibility
+# Accessibility & Keyboard Support
 
-Keyboard Navigation
-
-Screen Reader Labels
-
-High Contrast
-
-Large Click Areas
-
-Visible Focus States
-
-Descriptive Icons
+* **Keyboard Navigation Tabindex:** All custom marketplace cards and product recommendations must have `tabindex="0"`.
+* **Focus States:** Interacting with keyboard must trigger a high-contrast focus ring: `focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]`.
+* **Contrast Compliance:** Muted texts (`text-zinc-400`) must exceed WCAG 2.1 AA contrast ratio (> 4.5:1) against the dark surface background.
+* **ARIA Roles:**
+  - Custom tabs must use `role="tablist"`, `role="tab"`, and `aria-selected="true/false"`.
+  - Image upload dropzone must have `aria-label="Upload product screenshot or photo"`.
+  - Loading skeleton panels must define `aria-busy="true"`.
 
 ---
 
