@@ -801,7 +801,7 @@ Marketplace redirect
 
 Architecture overview
 
-Explain how Codex and GPT-5.6 were used during development.
+Explain the AI reasoning and scraper integration during development.
 
 ### Definition of Done
 
@@ -828,8 +828,6 @@ Challenges
 Lessons learned
 
 Future improvements
-
-Codex Session Feedback ID
 
 ### Definition of Done
 
@@ -881,8 +879,7 @@ Submission completed before deadline.
 * Working deployed application
 * Demo video under 3 minutes
 * Devpost submission completed
-* Codex usage documented
-* GPT-5.6 usage documented
+* AI systems usage documented
 
 ---
 
