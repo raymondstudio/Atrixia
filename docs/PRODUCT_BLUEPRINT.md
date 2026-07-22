@@ -10,7 +10,7 @@
 
 **Category:** Apps for Your Life
 
-**Hackathon:** OpenAI Build Week 2026
+**Hackathon:** Gemma 4 Hackathon
 
 ---
 
@@ -716,7 +716,7 @@ Vercel
 
 AI Runtime
 
-Gemini 2.5 Flash (free tier for MVP)
+Gemini 2.5 Flash/Pro (Google AI Studio) & Gemma 2/4 (via Ollama or Groq/Vertex AI)
 
 Architecture designed to support future OpenAI integration with minimal changes.
 
@@ -1017,6 +1017,12 @@ The intelligence of the recommendation—not the product listing—is Atrixia's 
 Traditional marketplaces help users **find products**.
 
 Atrixia helps users **make decisions**.
+
+### AI Chat & Reasoning Thread Integration
+To support natural conversational follow-up questions, the AI session is designed as a structured thread. Every new search query initializes a `conversation_id`. Follow-up clarification questions, user inputs, and progressive search results are tracked via the `messages` table, linking each recommendation back to the exact dialog exchange.
+
+### Marketplace Scraper Resiliency & Fallback
+To guarantee demo stability, the marketplace querying layer utilizes a proxy-backed `MarketplaceAdapter` with an automatic fallback to a local mock database. If live scraping encounters rate limiting or CAPTCHAs, the UI transparently reports the state and presents high-fidelity simulated listings to ensure uninterrupted product demos.
 
 That distinction defines every product, design, and engineering decision.
 

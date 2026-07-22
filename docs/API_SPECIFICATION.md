@@ -116,13 +116,9 @@ Authorization: Bearer <access_token>
 
 ---
 
-## POST /api/auth/signup
+## POST /api/auth/signup [DEPRECATED]
 
-Creates a new account.
-
-Authentication Required
-
-No
+*Note: Managed client-side via Supabase Auth Client SDK using PKCE. Middleware handles route-level protection.*
 
 ### Request
 
@@ -147,11 +143,9 @@ No
 
 ---
 
-## POST /api/auth/login
+## POST /api/auth/login [DEPRECATED]
 
-Authentication Required
-
-No
+*Note: Managed client-side via Supabase Auth Client SDK using PKCE. Middleware handles route-level protection.*
 
 ### Request
 
@@ -266,7 +260,19 @@ Example
 
 ## POST /api/search
 
-Primary product search endpoint.
+Queries marketplaces and returns progressive search and reasoning details via Server-Sent Events (SSE) streaming.
+
+### SSE Event Payload Sequences
+```
+event: thinking
+data: { "step": "querying", "message": "Initiating search across Amazon, eBay..." }
+
+event: results
+data: { "products": [ { "id": "...", "title": "...", "price": 49.99 } ] }
+
+event: reasoning
+data: { "step": "done", "recommendation": "..." }
+```
 
 Authentication Required
 

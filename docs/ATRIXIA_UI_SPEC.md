@@ -10,6 +10,22 @@
 
 ---
 
+# Design Tokens
+
+## Color Palette (Premium Dark Mode)
+* **Background:** `hsl(240, 10%, 3.9%)` (Deep midnight black)
+* **Card/Surface:** `hsl(240, 10%, 6%)` with `backdrop-filter: blur(12px)` and solid border `rgba(255,255,255,0.08)`
+* **Primary Accent:** `hsl(263.4, 70%, 50.4%)` (Vibrant electric violet)
+* **Secondary Glow:** `hsl(190, 95%, 45%)` (Cyan)
+* **Text High-contrast:** `hsl(0, 0%, 98%)`
+* **Text Muted:** `hsl(240, 5%, 64.9%)`
+
+## Typography
+* **Sans-serif:** `Outfit`, `Inter` (dynamic, premium geometry)
+* **Monospace:** `JetBrains Mono` (for code snippets, confidence scores, and raw metrics)
+
+---
+
 # Design Philosophy
 
 Atrixia should not feel like a shopping website.
@@ -351,19 +367,12 @@ Displayed as chat bubble.
 
 ## AI Thinking
 
-Animated indicator.
-
-Example
-
-Researching products...
-
-Reading reviews...
-
-Comparing sellers...
-
-Analyzing shipping...
-
-Preparing recommendation...
+Animated progressive indicator showing multi-step reasoning:
+1. `[Pulse]` *Deconstructing search parameters and intent...*
+2. `[Check]` *Initiating API and scraper queries across eBay, Walmart, and Amazon...*
+3. `[Check]` *Deduplicating candidate marketplace listings...*
+4. `[Pulse]` *Extracting user reviews for sentiment and reliability...*
+5. `[Check]` *Compiling recommendation decision report...*
 
 ---
 

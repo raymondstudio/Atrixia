@@ -199,16 +199,18 @@ A session begins when a user searches or uploads an image.
 
 ## Columns
 
-| Column       | Type        |
-| ------------ | ----------- |
-| id           | UUID        |
-| profile_id   | UUID        |
-| query        | TEXT        |
-| search_type  | TEXT        |
-| image_url    | TEXT        |
-| status       | TEXT        |
-| completed_at | TIMESTAMPTZ |
-| created_at   | TIMESTAMPTZ |
+| Column          | Type        |
+| --------------- | ----------- |
+| id              | UUID        |
+| profile_id      | UUID        |
+| conversation_id | UUID        | FK -> conversations.id (Links search to chat thread)
+| message_id      | UUID        | FK -> messages.id (Links search to specific user message)
+| query           | TEXT        |
+| search_type     | TEXT        |
+| image_url       | TEXT        |
+| status          | TEXT        |
+| completed_at    | TIMESTAMPTZ |
+| created_at      | TIMESTAMPTZ |
 
 ---
 
@@ -392,6 +394,22 @@ Example
   }
 ]
 ```
+
+---
+
+# TABLE: marketplace_cache
+
+Caches external marketplace raw responses to protect API limits.
+
+## Columns
+
+| Column       | Type        | Constraints |
+| ------------ | ----------- | ----------- |
+| id           | UUID        | PRIMARY KEY |
+| query_hash   | TEXT        | UNIQUE, NOT NULL |
+| raw_results  | JSONB       | NOT NULL    |
+| expires_at   | TIMESTAMPTZ | NOT NULL    |
+| created_at   | TIMESTAMPTZ | DEFAULT now() |
 
 ---
 

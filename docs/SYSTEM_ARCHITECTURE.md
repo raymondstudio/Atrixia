@@ -145,7 +145,7 @@ Stores:
 
 Primary
 
-Gemini 2.5 Flash
+Gemini 2.5 Flash / Pro & local Gemma 2/4 (via Vercel AI SDK Google/Vertex Provider)
 
 Architecture prepared for
 
@@ -182,11 +182,9 @@ The system consists of independent modules.
 
 Responsibilities
 
-* Sign Up
-* Login
-* Session Management
-* Authorization
-* Profile Retrieval
+* Client-side signup/login using `@supabase/ssr` and PKCE flow.
+* Next.js Middleware-based session validation & route protection.
+* Profile & Preferences Synchronization via triggers.
 
 Owns
 
@@ -260,6 +258,10 @@ Normalize product information.
 Deduplicate similar products.
 
 Return standardized listings.
+
+### Scraper Architecture & Rate Limiting
+- **Resiliency Adapter Pattern:** Employs a proxy-backed aggregator with configurable retry backoffs.
+- **Fallback mock client:** Actively checks network responses; if rate-limited or blocked, gracefully switches to realistic mock JSON datasets.
 
 ---
 

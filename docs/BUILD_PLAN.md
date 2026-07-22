@@ -8,7 +8,7 @@
 
 **Status:** Approved for Development
 
-**Objective:** Deliver a polished, production-quality MVP for the OpenAI Build Week hackathon. Every task below includes a clear definition of done and should be completed sequentially unless explicitly marked as parallelizable.
+**Objective:** Deliver a polished, production-quality MVP for the Gemma 4 Hackathon. Every task below includes a clear definition of done and should be completed sequentially unless explicitly marked as parallelizable.
 
 ---
 
@@ -117,6 +117,17 @@ Supabase connection verified.
 ---
 
 # Milestone 2 — Authentication
+
+## Task 4.5 — Scraper Adapter & Mock Setup
+
+### Objective
+Establish a dummy/mock scraper client that serves structured sample data to frontend developers, bypassing external rate limits early in development.
+
+### Deliverables
+* `MarketplaceMockAdapter` file with predefined JSON responses for typical queries (laptops, phones, chairs).
+* Middleware switcher for toggling between live scraping and mock responses.
+
+---
 
 ## Task 5 — Authentication System
 
