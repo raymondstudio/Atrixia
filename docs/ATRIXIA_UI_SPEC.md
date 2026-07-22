@@ -1,6 +1,6 @@
-# ARIXIA UI/UX SPECIFICATION v1.0
+# ATRIXIA UI/UX SPECIFICATION v1.0
 
-**Project:** Arixia
+**Project:** Atrixia
 
 **Version:** 1.0
 
@@ -12,7 +12,7 @@
 
 # Design Philosophy
 
-Arixia should not feel like a shopping website.
+Atrixia should not feel like a shopping website.
 
 It should feel like an intelligent AI workspace.
 
@@ -159,7 +159,7 @@ Large headline
 
 Subheading
 
-Arixia researches products across multiple marketplaces and recommends the best option with transparent AI reasoning.
+Atrixia researches products across multiple marketplaces and recommends the best option with transparent AI reasoning.
 
 Primary CTA
 
@@ -663,7 +663,7 @@ Saved
 
 Search
 
-"Start by asking Arixia a question."
+"Start by asking Atrixia a question."
 
 ---
 
@@ -1003,7 +1003,7 @@ User uploads a product image.
 
 ↓
 
-Arixia identifies the product.
+Atrixia identifies the product.
 
 ↓
 

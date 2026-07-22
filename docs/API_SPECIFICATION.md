@@ -1,8 +1,8 @@
 # API_SPECIFICATION.md
 
-# Arixia API Specification v1.0
+# Atrixia API Specification v1.0
 
-**Project:** Arixia
+**Project:** Atrixia
 
 **Version:** 1.0
 
@@ -16,7 +16,7 @@
 
 # Overview
 
-The Arixia API provides all backend functionality required for the AI-powered shopping assistant. It is responsible for:
+The Atrixia API provides all backend functionality required for the AI-powered shopping assistant. It is responsible for:
 
 * Authentication
 * AI search

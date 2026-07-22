@@ -1,8 +1,8 @@
-# ARIXIA PRODUCT BLUEPRINT v1.0
+# ATRIXIA PRODUCT BLUEPRINT v1.0
 
 ### Internal Product Requirements Document (PRD) & Technical Design Document (TDD)
 
-**Project Name:** Arixia
+**Project Name:** Atrixia
 
 **Version:** 1.0
 
@@ -16,7 +16,7 @@
 
 # Confidential
 
-This document serves as the internal source of truth for Arixia. Every product, engineering, design, and AI decision must align with the specifications defined here.
+This document serves as the internal source of truth for Atrixia. Every product, engineering, design, and AI decision must align with the specifications defined here.
 
 ---
 
@@ -26,7 +26,7 @@ This document serves as the internal source of truth for Arixia. Every product, 
 
 Create the world's most intelligent AI Shopping Agent that helps people make confident purchasing decisions instead of wasting hours comparing products across multiple marketplaces.
 
-Rather than acting as another search engine, Arixia acts as an intelligent shopping companion that researches products, evaluates trade-offs, understands user preferences, and recommends the best purchasing decision.
+Rather than acting as another search engine, Atrixia acts as an intelligent shopping companion that researches products, evaluates trade-offs, understands user preferences, and recommends the best purchasing decision.
 
 ---
 
@@ -38,7 +38,7 @@ Empower every online shopper to make smarter buying decisions through AI-powered
 
 ## Elevator Pitch
 
-Arixia is an AI Shopping Agent that researches products across multiple online marketplaces, analyzes reviews, evaluates pricing, shipping, authenticity, and seller trust, then explains which option is the best for you and why.
+Atrixia is an AI Shopping Agent that researches products across multiple online marketplaces, analyzes reviews, evaluates pricing, shipping, authenticity, and seller trust, then explains which option is the best for you and why.
 
 Instead of comparing hundreds of listings manually, users receive one intelligent recommendation backed by transparent reasoning.
 
@@ -66,9 +66,9 @@ As a result, shoppers make decisions based on incomplete information.
 
 # Our Solution
 
-Arixia transforms online shopping from searching into decision making.
+Atrixia transforms online shopping from searching into decision making.
 
-Instead of presenting users with dozens of similar products, Arixia researches the available options and generates a personalized recommendation based on:
+Instead of presenting users with dozens of similar products, Atrixia researches the available options and generates a personalized recommendation based on:
 
 * User preferences
 * Product quality
@@ -85,14 +85,14 @@ Every recommendation includes an explanation that users can understand and trust
 
 # Product Positioning
 
-Arixia is **not**:
+Atrixia is **not**:
 
 * A marketplace
 * A shopping website
 * A search engine
 * A price comparison website
 
-Arixia **is**:
+Atrixia **is**:
 
 An AI Shopping Decision Agent.
 
@@ -175,13 +175,13 @@ As a user,
 
 I want to upload an image of a product
 
-So that Arixia can identify it.
+So that Atrixia can identify it.
 
 ---
 
 As a user,
 
-I want Arixia to compare listings
+I want Atrixia to compare listings
 
 So I don't have to visit multiple stores.
 
@@ -207,7 +207,7 @@ So I spend less time researching.
 
 Search engines return results.
 
-Arixia returns decisions.
+Atrixia returns decisions.
 
 ---
 
@@ -316,7 +316,7 @@ Each listing includes:
 
 This is the core feature.
 
-Arixia generates:
+Atrixia generates:
 
 Recommended Product
 
@@ -604,7 +604,7 @@ Search feels conversational.
 
 Instead of returning products immediately,
 
-Arixia asks intelligent follow-up questions when necessary.
+Atrixia asks intelligent follow-up questions when necessary.
 
 Example
 
@@ -988,7 +988,7 @@ Gracefully handle unavailable data.
 
 # Why AI Is Essential
 
-Without AI, Arixia becomes another comparison website.
+Without AI, Atrixia becomes another comparison website.
 
 AI is required to:
 
@@ -1008,7 +1008,7 @@ Explain decisions.
 
 Build trust.
 
-The intelligence of the recommendation—not the product listing—is Arixia's core innovation.
+The intelligence of the recommendation—not the product listing—is Atrixia's core innovation.
 
 ---
 
@@ -1016,7 +1016,7 @@ The intelligence of the recommendation—not the product listing—is Arixia's c
 
 Traditional marketplaces help users **find products**.
 
-Arixia helps users **make decisions**.
+Atrixia helps users **make decisions**.
 
 That distinction defines every product, design, and engineering decision.
 
@@ -1027,7 +1027,7 @@ That distinction defines every product, design, and engineering decision.
 1. Introduce the problem of fragmented online shopping.
 2. Show searching with natural language.
 3. Demonstrate image upload and product recognition.
-4. Show Arixia asking clarifying questions.
+4. Show Atrixia asking clarifying questions.
 5. Display normalized marketplace results.
 6. Reveal the AI Decision Report with confidence score, reasoning, and trade-offs.
 7. Open a product on the original marketplace.
@@ -1075,7 +1075,7 @@ Allows the application to switch between providers (e.g., Gemini during the hack
 
 # Final Statement
 
-Arixia is not trying to replace online marketplaces.
+Atrixia is not trying to replace online marketplaces.
 
 It is building the intelligence layer that has always been missing from online shopping.
 

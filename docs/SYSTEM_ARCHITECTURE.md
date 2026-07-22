@@ -1,20 +1,20 @@
 # SYSTEM_ARCHITECTURE.md
 
-# Arixia System Architecture v1.0
+# Atrixia System Architecture v1.0
 
-**Project:** Arixia
+**Project:** Atrixia
 
 **Version:** 1.0
 
 **Status:** Approved for Development
 
-**Purpose:** This document defines the complete technical architecture of Arixia. It is the authoritative reference for all engineering decisions and implementation. Every module, service, API, and component must conform to this architecture.
+**Purpose:** This document defines the complete technical architecture of Atrixia. It is the authoritative reference for all engineering decisions and implementation. Every module, service, API, and component must conform to this architecture.
 
 ---
 
 # 1. Architecture Principles
 
-Arixia is designed around five core engineering principles.
+Atrixia is designed around five core engineering principles.
 
 ## AI First
 
@@ -601,7 +601,7 @@ The recommendation engine never knows which marketplace produced the data.
 
 # 10. Recommendation Engine
 
-This is the heart of Arixia.
+This is the heart of Atrixia.
 
 Pipeline
 
@@ -1139,4 +1139,4 @@ docs/
 
 # Final Architecture Statement
 
-Arixia is designed as an AI-first, modular, provider-agnostic platform where intelligence—not marketplace integration—is the core product. Every architectural decision prioritizes maintainability, extensibility, explainability, and user trust. The system separates presentation, business logic, AI reasoning, marketplace integration, and persistence into distinct layers, ensuring that future growth, provider changes, and new features can be introduced with minimal impact on the overall application architecture.
+Atrixia is designed as an AI-first, modular, provider-agnostic platform where intelligence—not marketplace integration—is the core product. Every architectural decision prioritizes maintainability, extensibility, explainability, and user trust. The system separates presentation, business logic, AI reasoning, marketplace integration, and persistence into distinct layers, ensuring that future growth, provider changes, and new features can be introduced with minimal impact on the overall application architecture.

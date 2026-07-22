@@ -1,8 +1,8 @@
 # BUILD_PLAN.md
 
-# Arixia Development Build Plan v1.0
+# Atrixia Development Build Plan v1.0
 
-**Project:** Arixia
+**Project:** Atrixia
 
 **Version:** 1.0
 

@@ -1,8 +1,8 @@
 # DATABASE_SCHEMA.md
 
-# Arixia Database Schema v1.0
+# Atrixia Database Schema v1.0
 
-**Project:** Arixia
+**Project:** Atrixia
 
 **Version:** 1.0
 
@@ -14,7 +14,7 @@
 
 # Overview
 
-This document defines the complete relational database schema for Arixia.
+This document defines the complete relational database schema for Atrixia.
 
 The schema is designed to support:
 
@@ -358,7 +358,7 @@ Many listings can belong to one product.
 
 # TABLE: recommendations
 
-The heart of Arixia.
+The heart of Atrixia.
 
 One recommendation belongs to one search.
 
