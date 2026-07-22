@@ -249,11 +249,13 @@ The MVP includes only features that directly contribute to the core AI shopping 
 
 ---
 
-## Authentication
+## Authentication & Onboarding
 
-* Email Sign In
-* Google Sign In
-* User Preferences
+* **Secure PKCE Authentication:** Email/Password & Google OAuth handled client-side using Supabase.
+* **Onboarding Personalization Wizard:**
+  - Multi-step configuration upon first sign-in.
+  - Form fields: Preferred Currency (USD, EUR, GBP, NGN), Default Budget Range per category, Prioritization weights (slider scale for Price, Quality, Shipping Speed, and Seller Trust), and Favorite Marketplaces.
+  - Preference persistence to the `preferences` table.
 
 ---
 
@@ -400,59 +402,60 @@ Answering follow-up questions
 
 ---
 
-# AI Reasoning Pipeline
+# AI Reasoning Pipeline & Exception Workflows
 
-User Input
+```
+      User Input (Text/Image)
+                 │
+                 ▼
+          Intent Detection ───────► [Edge: Contradictory Input/Preferences?] ──► Clarify
+                 │
+                 ▼
+         Marketplace Search ──────► [Edge: Zero Results?] ────────────────────► Mock/Fallback API
+                 │
+                 ▼
+      Data Collection & Cache
+                 │
+                 ▼
+       Product Normalization
+                 │
+                 ▼
+         Review Analysis
+                 │
+                 ▼
+         Seller Analysis
+                 │
+                 ▼
+       Trade-off Evaluation
+                 │
+                 ▼
+      Recommendation Generation
+                 │
+                 ▼
+           Decision Report
+```
 
-↓
+### 1. Handling Conflicting User Preferences
+When user inputs contradict their saved preferences (e.g., asking for a "highly durable leather bag" with a budget override of "$10" while prioritizing premium quality):
+- **Detection:** The AI compares active query parameters against user preference states.
+- **Resolution:** Rather than failing or returning poor-quality results, the AI halts the pipeline to present a clarifying conversational choice: *"I see you are looking for high durability, but the $10 budget limit restricts options to synthetic materials. Would you like to view the highest-rated option at $35, or find synthetic bags under $10?"*
 
-Intent Detection
+### 2. Handling Uncertainty & Ambiguous Queries
+- **Threshold:** If the search intent confidence score drops below 70% (e.g., "something cool for my study room"), the system triggers a clarification prompt sequence to narrow the scope.
+- **Interactive Prompts:** Dynamic option buttons are returned (e.g., "Lighting", "Desk Organization", "Wall Decor") to keep the interface highly conversational and low-friction.
 
-↓
-
-Clarification Questions (if necessary)
-
-↓
-
-Marketplace Search
-
-↓
-
-Data Collection
-
-↓
-
-Product Normalization
-
-↓
-
-Review Analysis
-
-↓
-
-Seller Analysis
-
-↓
-
-Trade-off Evaluation
-
-↓
-
-Recommendation Generation
-
-↓
-
-Decision Report
+### 3. Handling Zero Marketplace Results
+- **Fallback Adapter Strategy:** If external scraping returns empty lists due to strict queries or service outages:
+  1. The system drops secondary query terms (e.g. searching for "original blue leather case model X" falls back to "leather case model X").
+  2. If still empty, it serves related categories while clearly displaying a warning banner: *"We couldn't find matching live listings for your exact query. Here are similar items or popular alternatives."*
 
 ---
 
-# AI Principles
+# AI Principles & Guarantees
 
-The AI should never recommend a product without explaining why.
-
-The AI should always mention important trade-offs.
-
-The AI should acknowledge uncertainty when confidence is low.
+* **No Unexplained Recommendations:** The AI must generate a structured JSON object detailing specific pros, cons, and confidence scores based on scraped review tokens.
+* **Trade-off Highlight Constraint:** The AI must explicitly contrast the recommended option with the lowest-priced and fastest-shipping alternatives.
+* **Acknowledge Uncertainty:** If the confidence score is below 60%, the report must contain a prominent warning explaining the missing metrics (e.g., "Insufficient seller ratings" or "Lack of verified reviews").
 
 ---
 
