@@ -15,11 +15,11 @@ export async function updateProfileAction(formData: FormData): Promise<{ error?:
     return { error: "Authentication required." };
   }
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from("profiles")
     .update({
       full_name: fullName,
-    } as any)
+    })
     .eq("auth_user_id", user.id);
 
   if (error) {
@@ -48,7 +48,7 @@ export async function updatePreferencesAction(formData: FormData): Promise<{ err
     return { error: "Authentication required." };
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await (supabase as any)
     .from("profiles")
     .select("id")
     .eq("auth_user_id", user.id)
@@ -60,7 +60,7 @@ export async function updatePreferencesAction(formData: FormData): Promise<{ err
     return { error: "Profile not found." };
   }
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from("preferences")
     .update({
       currency,
@@ -70,7 +70,7 @@ export async function updatePreferencesAction(formData: FormData): Promise<{ err
       prioritize_quality: prioritizeQuality,
       prioritize_shipping: prioritizeShipping,
       prioritize_seller: prioritizeSeller,
-    } as any)
+    })
     .eq("profile_id", profileData.id);
 
   if (error) {

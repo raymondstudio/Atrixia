@@ -12,7 +12,7 @@ export async function GET() {
     );
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await (supabase as any)
     .from("profiles")
     .select("id")
     .eq("auth_user_id", user.id)
@@ -20,7 +20,7 @@ export async function GET() {
 
   const profileData = profile as { id: string } | null;
 
-  const { data: prefs } = await supabase
+  const { data: prefs } = await (supabase as any)
     .from("preferences")
     .select("*")
     .eq("profile_id", profileData?.id || "")
@@ -28,7 +28,7 @@ export async function GET() {
 
   return NextResponse.json({
     success: true,
-    data: (prefs as any) || {},
+    data: prefs || {},
   });
 }
 
@@ -45,7 +45,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    const { data: profile } = await supabase
+    const { data: profile } = await (supabase as any)
       .from("profiles")
       .select("id")
       .eq("auth_user_id", user.id)
@@ -53,9 +53,9 @@ export async function PUT(request: Request) {
 
     const profileData = profile as { id: string } | null;
 
-    const { data: updatedPrefs, error } = await supabase
+    const { data: updatedPrefs, error } = await (supabase as any)
       .from("preferences")
-      .update(body as any)
+      .update(body)
       .eq("profile_id", profileData?.id || "")
       .select()
       .single();

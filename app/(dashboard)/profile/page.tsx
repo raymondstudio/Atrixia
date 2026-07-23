@@ -32,7 +32,7 @@ export default async function ProfilePage() {
           <CardDescription>Update your display name and public account info</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateProfileAction} className="space-y-4">
+          <form action={async (formData: FormData) => { "use server"; await updateProfileAction(formData); }} className="space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-medium text-muted-foreground">Full Name</label>
               <div className="relative">
