@@ -18,15 +18,17 @@ export async function GET() {
     .eq("auth_user_id", user.id)
     .single();
 
+  const profileData = profile as { id: string } | null;
+
   const { data: prefs } = await supabase
     .from("preferences")
     .select("*")
-    .eq("profile_id", profile?.id || "")
+    .eq("profile_id", profileData?.id || "")
     .single();
 
   return NextResponse.json({
     success: true,
-    data: prefs || {},
+    data: (prefs as any) || {},
   });
 }
 
@@ -49,10 +51,12 @@ export async function PUT(request: Request) {
       .eq("auth_user_id", user.id)
       .single();
 
+    const profileData = profile as { id: string } | null;
+
     const { data: updatedPrefs, error } = await supabase
       .from("preferences")
-      .update(body)
-      .eq("profile_id", profile?.id || "")
+      .update(body as any)
+      .eq("profile_id", profileData?.id || "")
       .select()
       .single();
 

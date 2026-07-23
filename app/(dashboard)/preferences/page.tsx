@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { updatePreferencesAction } from "@/app/actions/user";
-import { Sliders, DollarSign, Check } from "lucide-react";
+import { DollarSign, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -15,11 +15,23 @@ export default async function PreferencesPage() {
     .eq("auth_user_id", user?.id || "")
     .single();
 
-  const { data: prefs } = await supabase
+  const profileData = profile as { id: string } | null;
+
+  const { data: rawPrefs } = await supabase
     .from("preferences")
     .select("*")
-    .eq("profile_id", profile?.id || "")
+    .eq("profile_id", profileData?.id || "")
     .single();
+
+  const prefs = rawPrefs as {
+    currency?: string;
+    budget_min?: number;
+    budget_max?: number;
+    prioritize_price?: boolean;
+    prioritize_quality?: boolean;
+    prioritize_shipping?: boolean;
+    prioritize_seller?: boolean;
+  } | null;
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -36,7 +48,7 @@ export default async function PreferencesPage() {
           <CardDescription>Select which metrics the AI engine should prioritize</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updatePreferencesAction} className="space-y-6">
+          <form action={async (formData: FormData) => { "use server"; await updatePreferencesAction(formData); }} className="space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-medium text-muted-foreground">Preferred Currency</label>
               <select

@@ -19,11 +19,13 @@ export default async function DashboardLayout({
   }
 
   // Prefetch profile info for top nav bar
-  const { data: profile } = await supabase
+  const { data: rawProfile } = await supabase
     .from("profiles")
     .select("full_name, email")
     .eq("auth_user_id", user.id)
     .single();
+
+  const profile = rawProfile as { full_name: string; email: string } | null;
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -34,7 +36,7 @@ export default async function DashboardLayout({
       <div className="flex flex-1 flex-col overflow-x-hidden pb-16 md:pb-0">
         {/* Top Header */}
         <TopNav
-          userEmail={profile?.email || user.email}
+          userEmail={profile?.email || user.email || "user@example.com"}
           fullName={profile?.full_name || "User"}
         />
 

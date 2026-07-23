@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Search, Sparkles, Image as ImageIcon, ArrowRight, Laptop, Headphones, Armchair, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 
 const suggestedPrompts = [
@@ -15,12 +15,13 @@ export default async function HomePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: profile } = await supabase
+  const { data: rawProfile } = await supabase
     .from("profiles")
     .select("full_name")
     .eq("auth_user_id", user?.id || "")
     .single();
 
+  const profile = rawProfile as { full_name: string } | null;
   const firstName = profile?.full_name?.split(" ")[0] || "User";
 
   return (

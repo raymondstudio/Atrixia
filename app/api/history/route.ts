@@ -22,17 +22,19 @@ export async function GET(request: Request) {
     .eq("auth_user_id", user.id)
     .single();
 
+  const profileData = profile as { id: string } | null;
+
   const { data: history, count } = await supabase
     .from("search_history")
     .select("id, query, created_at, search_session_id", { count: "exact" })
-    .eq("profile_id", profile?.id || "")
+    .eq("profile_id", profileData?.id || "")
     .order("created_at", { ascending: false })
     .range((page - 1) * limit, page * limit - 1);
 
   return NextResponse.json({
     success: true,
     data: {
-      items: history || [],
+      items: (history as any[]) || [],
       total: count || 0,
       page,
       limit,

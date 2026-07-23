@@ -2,11 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-export async function updateProfileAction(formData: FormData) {
+export async function updateProfileAction(formData: FormData): Promise<{ error?: string; success?: string }> {
   const fullName = formData.get("fullName") as string;
-  const avatarUrl = formData.get("avatarUrl") as string;
 
   const supabase = await createClient();
   const {
@@ -21,8 +19,7 @@ export async function updateProfileAction(formData: FormData) {
     .from("profiles")
     .update({
       full_name: fullName,
-      avatar_url: avatarUrl || null,
-    })
+    } as any)
     .eq("auth_user_id", user.id);
 
   if (error) {
@@ -33,7 +30,7 @@ export async function updateProfileAction(formData: FormData) {
   return { success: "Profile updated successfully." };
 }
 
-export async function updatePreferencesAction(formData: FormData) {
+export async function updatePreferencesAction(formData: FormData): Promise<{ error?: string; success?: string }> {
   const currency = (formData.get("currency") as string) || "USD";
   const budgetMin = Number(formData.get("budgetMin")) || 0;
   const budgetMax = Number(formData.get("budgetMax")) || 1000;
@@ -41,7 +38,6 @@ export async function updatePreferencesAction(formData: FormData) {
   const prioritizeQuality = formData.get("prioritizeQuality") === "true";
   const prioritizeShipping = formData.get("prioritizeShipping") === "true";
   const prioritizeSeller = formData.get("prioritizeSeller") === "true";
-  const prioritizeReviews = formData.get("prioritizeReviews") === "true";
 
   const supabase = await createClient();
   const {
@@ -58,7 +54,9 @@ export async function updatePreferencesAction(formData: FormData) {
     .eq("auth_user_id", user.id)
     .single();
 
-  if (!profile) {
+  const profileData = profile as { id: string } | null;
+
+  if (!profileData) {
     return { error: "Profile not found." };
   }
 
@@ -72,9 +70,8 @@ export async function updatePreferencesAction(formData: FormData) {
       prioritize_quality: prioritizeQuality,
       prioritize_shipping: prioritizeShipping,
       prioritize_seller: prioritizeSeller,
-      prioritize_reviews: prioritizeReviews,
-    })
-    .eq("profile_id", profile.id);
+    } as any)
+    .eq("profile_id", profileData.id);
 
   if (error) {
     return { error: error.message };
@@ -84,10 +81,10 @@ export async function updatePreferencesAction(formData: FormData) {
   return { success: "Preferences updated successfully." };
 }
 
-export async function completeOnboardingAction(formData: FormData) {
+export async function completeOnboardingAction(formData: FormData): Promise<{ error?: string; success?: string }> {
   const res = await updatePreferencesAction(formData);
   if (res?.error) {
     return res;
   }
-  redirect("/home");
+  return { success: "Onboarding completed successfully." };
 }

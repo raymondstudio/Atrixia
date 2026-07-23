@@ -14,10 +14,14 @@ export default async function SavedPage() {
     .eq("auth_user_id", user?.id || "")
     .single();
 
-  const { data: savedItems } = await supabase
+  const profileData = profile as { id: string } | null;
+
+  const { data: rawSavedItems } = await supabase
     .from("saved_items")
     .select("id, recommendation_id, created_at")
-    .eq("profile_id", profile?.id || "");
+    .eq("profile_id", profileData?.id || "");
+
+  const savedItems = rawSavedItems as Array<{ id: string; recommendation_id: string; created_at: string }> | null;
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">

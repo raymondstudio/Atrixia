@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { updateProfileAction } from "@/app/actions/user";
-import { User, Mail, Sparkles, Check } from "lucide-react";
+import { User, Mail, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -9,11 +9,13 @@ export default async function ProfilePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: profile } = await supabase
+  const { data: rawProfile } = await supabase
     .from("profiles")
     .select("full_name, email, avatar_url")
     .eq("auth_user_id", user?.id || "")
     .single();
+
+  const profile = rawProfile as { full_name: string; email: string; avatar_url: string | null } | null;
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">

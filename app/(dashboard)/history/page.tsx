@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { History as HistoryIcon, ArrowRight } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { createClient } from "@/lib/supabase/server";
 
@@ -14,11 +14,15 @@ export default async function HistoryPage() {
     .eq("auth_user_id", user?.id || "")
     .single();
 
-  const { data: history } = await supabase
+  const profileData = profile as { id: string } | null;
+
+  const { data: rawHistory } = await supabase
     .from("search_history")
     .select("id, query, created_at, search_session_id")
-    .eq("profile_id", profile?.id || "")
+    .eq("profile_id", profileData?.id || "")
     .order("created_at", { ascending: false });
+
+  const history = rawHistory as Array<{ id: string; query: string; created_at: string; search_session_id: string }> | null;
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
